@@ -1,0 +1,31 @@
+# Dependencies
+node_modules
+
+# Nuxt / Nitro build output
+.nuxt
+.nitro
+.output
+.data
+dist
+
+# Deployment
+.vercel
+
+# Environment variables (never commit real secrets)
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+npm-debug.log*
+
+# Editor / OS
+.vscode
+.idea
+.DS_Store
+Thumbs.db
+
+# Claude Code local tooling — not part of the app, kept out of the shared repo
+.claude
+CLAUDE.md
