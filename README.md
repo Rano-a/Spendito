@@ -97,5 +97,3 @@ server/utils/   connexion MongoDB, utilitaires d'authentification (hash, session
 | `/projects` | Projets d'épargne |
 | `/settings` | Catégories, nom du compte, mot de passe |
 | `/login`, `/register` | Authentification |
-
-Pour un guide d'architecture plus détaillé (conventions, pièges connus, décisions de conception), voir `CLAUDE.md` — ce fichier n'est pas versionné, il reste local.
