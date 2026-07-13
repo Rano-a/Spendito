@@ -9,6 +9,7 @@ export interface CycleData {
 export interface TransactionData {
   _id: string
   montant: number
+  montantPrevu?: number
   type: 'depense_variable' | 'depense_fixe' | 'epargne' | 'revenu'
   categorie: string
   note: string
@@ -79,7 +80,6 @@ export function useCycle() {
   })
 
   const totalRevenu = computed(() => sumByType('revenu'))
-  const totalDepensesFixes = computed(() => sumByType('depense_fixe'))
   const totalDepensesVariables = computed(() => sumByType('depense_variable'))
   const totalEpargne = computed(() => sumByType('epargne'))
 
@@ -89,8 +89,29 @@ export function useCycle() {
       .reduce((acc, t) => acc + t.montant, 0)
   }
 
+  // Bills are entered as "planned" and only count toward the actual totals once
+  // checked off as paid; the planned total counts every bill regardless of paid status.
+  const totalDepensesFixes = computed(() => {
+    return transactions.value
+      .filter(t => t.type === 'depense_fixe' && t.paye)
+      .reduce((acc, t) => acc + t.montant, 0)
+  })
+
+  // Confirmed bills contribute their actual amount; unpaid ones contribute their planned
+  // amount, so this total converges to totalDepensesFixes as bills get checked off.
+  const totalDepensesFixesPrevu = computed(() => {
+    const nonPayees = transactions.value
+      .filter(t => t.type === 'depense_fixe' && !t.paye)
+      .reduce((acc, t) => acc + (t.montantPrevu ?? t.montant), 0)
+    return totalDepensesFixes.value + nonPayees
+  })
+
   const resteADepenser = computed(() => {
     return totalRevenu.value - totalDepensesFixes.value - totalDepensesVariables.value - totalEpargne.value
+  })
+
+  const resteADepenserPrevu = computed(() => {
+    return totalRevenu.value - totalDepensesFixesPrevu.value - totalDepensesVariables.value - totalEpargne.value
   })
 
   const resteParJour = computed(() => {
@@ -100,6 +121,10 @@ export function useCycle() {
 
   const enveloppeVariable = computed(() => {
     return Math.max(1, totalRevenu.value - totalDepensesFixes.value - totalEpargne.value)
+  })
+
+  const enveloppeVariablePrevu = computed(() => {
+    return Math.max(1, totalRevenu.value - totalDepensesFixesPrevu.value - totalEpargne.value)
   })
 
   const progressionVariable = computed(() => {
@@ -153,9 +178,12 @@ export function useCycle() {
     totalDepensesFixes,
     totalDepensesVariables,
     totalEpargne,
+    totalDepensesFixesPrevu,
     resteADepenser,
+    resteADepenserPrevu,
     resteParJour,
     enveloppeVariable,
+    enveloppeVariablePrevu,
     progressionVariable,
     ambiance,
     moisCouvert

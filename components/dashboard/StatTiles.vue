@@ -1,10 +1,10 @@
 <script setup lang="ts">
-const { totalRevenu, totalDepensesVariables, totalDepensesFixes, totalEpargne } = useCycle()
+const { totalRevenu, totalDepensesVariables, totalDepensesFixes, totalEpargne, totalDepensesFixesPrevu } = useCycle()
 
 const tuiles = computed(() => [
   { label: 'Income', valeur: totalRevenu.value, dot: 'bg-good' },
   { label: 'Expenses', valeur: totalDepensesVariables.value, dot: 'bg-[#2a78d6] dark:bg-[#3987e5]' },
-  { label: 'Bills', valeur: totalDepensesFixes.value, dot: 'bg-[#1baf7a] dark:bg-[#199e70]' },
+  { label: 'Bills', valeur: totalDepensesFixes.value, dot: 'bg-[#1baf7a] dark:bg-[#199e70]', prevu: totalDepensesFixesPrevu.value },
   { label: 'Savings', valeur: totalEpargne.value, dot: 'bg-[#4a3aa7] dark:bg-[#9085e9]' }
 ])
 
@@ -20,7 +20,10 @@ function formatMontant(n: number) {
         <span class="w-2 h-2 rounded-full shrink-0" :class="t.dot" />
         <p class="text-xs text-slate-500 dark:text-slate-400 truncate">{{ t.label }}</p>
       </div>
-      <p class="text-lg font-semibold">€{{ formatMontant(t.valeur) }}</p>
+      <p class="text-lg font-semibold">{{ formatMontant(t.valeur) }} €</p>
+      <p v-if="t.prevu !== undefined && t.prevu !== t.valeur" class="text-xs text-slate-400 mt-0.5">
+        Planned {{ formatMontant(t.prevu) }} €
+      </p>
     </div>
   </div>
 </template>

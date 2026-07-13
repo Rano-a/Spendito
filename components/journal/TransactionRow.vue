@@ -14,6 +14,8 @@ const note = ref(props.transaction.note)
 const date = ref(props.transaction.date.slice(0, 10))
 const saving = ref(false)
 
+const aPrevu = computed(() => props.transaction.type === 'depense_fixe')
+
 const typeLabels: Record<string, string> = {
   depense_variable: 'Expense',
   depense_fixe: 'Bill',
@@ -95,9 +97,17 @@ function formatDate(d: string) {
         </p>
       </div>
       <div class="flex items-center gap-2 shrink-0">
-        <span class="font-semibold" :class="typeColor[transaction.type]">
-          {{ signe }}€{{ transaction.montant.toFixed(2) }}
-        </span>
+        <div class="text-right">
+          <span class="font-semibold block" :class="typeColor[transaction.type]">
+            {{ signe }}{{ transaction.montant.toFixed(2) }} €
+          </span>
+          <span
+            v-if="aPrevu && transaction.montantPrevu != null && transaction.montantPrevu !== transaction.montant"
+            class="text-xs text-slate-400"
+          >
+            Planned {{ transaction.montantPrevu.toFixed(2) }} €
+          </span>
+        </div>
         <button class="p-1.5 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400" @click="startEdit">
           <Pencil :size="15" />
         </button>
@@ -108,7 +118,15 @@ function formatDate(d: string) {
     </template>
     <template v-else>
       <div class="flex-1 flex flex-wrap items-center gap-2">
-        <input v-model.number="montant" type="number" step="0.01" class="input py-1.5 w-24">
+        <div class="flex flex-col">
+          <input v-model.number="montant" type="number" step="0.01" class="input py-1.5 w-24">
+          <span
+            v-if="aPrevu && transaction.montantPrevu != null && transaction.montantPrevu !== transaction.montant"
+            class="text-xs text-slate-400 mt-0.5"
+          >
+            Planned: {{ transaction.montantPrevu.toFixed(2) }} €
+          </span>
+        </div>
         <select v-model="categorie" class="input py-1.5 w-32">
           <option v-for="c in categories" :key="c._id" :value="c.nom">{{ c.nom }}</option>
         </select>

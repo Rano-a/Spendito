@@ -2,7 +2,7 @@
 import { Sun, CloudSun, CloudRain } from 'lucide-vue-next'
 
 const {
-  resteADepenser, resteParJour, joursRestants, ambiance,
+  resteADepenser, resteADepenserPrevu, resteParJour, joursRestants, ambiance,
   progressionVariable, positionAiguille, totalDepensesVariables, enveloppeVariable
 } = useCycle()
 
@@ -48,16 +48,19 @@ function formatMontant(n: number) {
       </svg>
       <div class="absolute inset-0 flex flex-col items-center justify-center px-4 text-center">
         <p class="text-xs text-slate-500 dark:text-slate-400">Left to spend</p>
-        <p class="text-3xl font-bold tracking-tight">€{{ formatMontant(resteADepenser) }}</p>
+        <p class="text-3xl font-bold tracking-tight">{{ formatMontant(resteADepenser) }} €</p>
+        <p v-if="resteADepenserPrevu !== resteADepenser" class="text-xs text-slate-400 mt-0.5">
+          Forecast {{ formatMontant(resteADepenserPrevu) }} €
+        </p>
       </div>
     </div>
 
     <p class="mt-4 text-center text-sm text-slate-500 dark:text-slate-400">
-      That's <span class="font-semibold text-slate-700 dark:text-slate-200">€{{ formatMontant(resteParJour) }} / day</span>
+      That's <span class="font-semibold text-slate-700 dark:text-slate-200">{{ formatMontant(resteParJour) }} € / day</span>
       over {{ joursRestants }} day{{ joursRestants > 1 ? 's' : '' }}
     </p>
     <p class="mt-1 text-center text-xs text-slate-400">
-      €{{ formatMontant(totalDepensesVariables) }} / €{{ formatMontant(enveloppeVariable) }} of the expense envelope
+      {{ formatMontant(totalDepensesVariables) }} € / {{ formatMontant(enveloppeVariable) }} € of the expense envelope
       · the marker shows where you should be today
     </p>
   </div>

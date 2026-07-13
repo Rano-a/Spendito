@@ -3,6 +3,7 @@ const { Schema, model, models } = mongoose
 
 const TransactionSchema = new Schema({
   montant: { type: Number, required: true },
+  montantPrevu: { type: Number },
   type: {
     type: String,
     enum: ['depense_variable', 'depense_fixe', 'epargne', 'revenu'],

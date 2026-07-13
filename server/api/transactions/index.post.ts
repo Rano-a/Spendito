@@ -6,7 +6,7 @@ export default defineEventHandler(async (event) => {
   await connectDB()
 
   const body = await readBody(event)
-  const { montant, type, categorie, note, date, cycleId } = body
+  const { montant, montantPrevu, type, categorie, note, date, cycleId } = body
 
   if (!montant || !cycleId) {
     throw createError({ statusCode: 400, statusMessage: 'montant and cycleId are required' })
@@ -19,6 +19,7 @@ export default defineEventHandler(async (event) => {
 
   const transaction = await Transaction.create({
     montant,
+    montantPrevu: montantPrevu ?? montant,
     type: type || 'depense_variable',
     categorie: categorie || '',
     note: note || '',

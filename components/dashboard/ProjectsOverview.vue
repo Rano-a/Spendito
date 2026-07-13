@@ -20,7 +20,7 @@ function formatMontant(n: number) {
       <div v-for="p in projets" :key="p._id">
         <div class="flex items-center justify-between gap-2 mb-1 text-sm">
           <span class="truncate font-medium">{{ p.nom }}</span>
-          <span class="shrink-0 text-slate-400">€{{ formatMontant(p.montantActuel) }} / €{{ formatMontant(p.montantCible) }}</span>
+          <span class="shrink-0 text-slate-400">{{ formatMontant(p.montantActuel) }} € / {{ formatMontant(p.montantCible) }} €</span>
         </div>
         <div class="w-full h-2 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
           <div

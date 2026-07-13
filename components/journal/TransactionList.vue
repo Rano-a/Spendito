@@ -145,7 +145,7 @@ async function confirmAdd() {
       <div class="sticky top-0 z-10 flex items-center justify-between gap-2 px-4 py-1.5 bg-slate-100/90 dark:bg-slate-800/90 backdrop-blur text-xs font-medium text-slate-500 dark:text-slate-400 capitalize">
         <span>{{ groupe.label }}</span>
         <span :class="groupe.total >= 0 ? 'text-good' : 'text-slate-500 dark:text-slate-400'">
-          {{ groupe.total >= 0 ? '+' : '' }}€{{ groupe.total.toFixed(2) }}
+          {{ groupe.total >= 0 ? '+' : '' }}{{ groupe.total.toFixed(2) }} €
         </span>
       </div>
       <JournalTransactionRow v-for="t in groupe.items" :key="t._id" :transaction="t" />
@@ -163,7 +163,7 @@ async function confirmAdd() {
     <div v-if="trie.length" class="flex items-center justify-between gap-2 px-4 py-2.5 border-t border-slate-200 dark:border-slate-700 text-sm font-semibold">
       <span>Total</span>
       <span :class="total >= 0 ? 'text-good' : 'text-slate-700 dark:text-slate-200'">
-        {{ total >= 0 ? '+' : '' }}€{{ total.toFixed(2) }}
+        {{ total >= 0 ? '+' : '' }}{{ total.toFixed(2) }} €
       </span>
     </div>
   </div>

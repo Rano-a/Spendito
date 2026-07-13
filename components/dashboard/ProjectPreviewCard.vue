@@ -37,7 +37,7 @@ function formatMontant(n: number) {
         </div>
         <UiProgressBar :progress="progress" color="indigo" height="h-2.5" />
         <p class="mt-1 text-xs text-slate-400">
-          €{{ formatMontant(projetPrincipal.montantActuel) }} / €{{ formatMontant(projetPrincipal.montantCible) }}
+          {{ formatMontant(projetPrincipal.montantActuel) }} € / {{ formatMontant(projetPrincipal.montantCible) }} €
         </p>
       </div>
     </template>

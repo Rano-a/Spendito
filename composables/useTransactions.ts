@@ -3,6 +3,7 @@ export function useTransactions() {
 
   async function ajouterTransaction(payload: {
     montant: number
+    montantPrevu?: number
     type: string
     categorie: string
     note?: string

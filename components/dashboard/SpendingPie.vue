@@ -67,7 +67,7 @@ function pourcentage(valeur: number) {
         </svg>
         <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
           <p class="text-xs text-slate-500 dark:text-slate-400">Total</p>
-          <p class="text-lg font-bold tracking-tight">€{{ formatMontant(total) }}</p>
+          <p class="text-lg font-bold tracking-tight">{{ formatMontant(total) }} €</p>
         </div>
       </div>
 
@@ -79,7 +79,7 @@ function pourcentage(valeur: number) {
             <span class="truncate text-slate-600 dark:text-slate-300">{{ d.label }}</span>
           </span>
           <span class="shrink-0 font-medium">
-            €{{ formatMontant(d.valeur) }} <span class="text-slate-400 font-normal">({{ pourcentage(d.valeur) }}%)</span>
+            {{ formatMontant(d.valeur) }} € <span class="text-slate-400 font-normal">({{ pourcentage(d.valeur) }}%)</span>
           </span>
         </div>
       </div>

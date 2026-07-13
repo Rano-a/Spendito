@@ -34,7 +34,7 @@ function formatDate(d: string) {
           <p class="text-xs text-slate-400">{{ formatDate(t.date) }} · {{ typeLabels[t.type] }}</p>
         </div>
         <span class="shrink-0 font-semibold" :class="t.type === 'revenu' ? 'text-good' : 'text-slate-600 dark:text-slate-300'">
-          {{ t.type === 'revenu' ? '+' : '-' }}€{{ formatMontant(t.montant) }}
+          {{ t.type === 'revenu' ? '+' : '-' }}{{ formatMontant(t.montant) }} €
         </span>
       </div>
     </div>

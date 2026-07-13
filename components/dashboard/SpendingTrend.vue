@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { transactions, cycleActif, joursTotal, joursEcoules, enveloppeVariable } = useCycle()
+const { transactions, cycleActif, joursTotal, joursEcoules, enveloppeVariable, enveloppeVariablePrevu } = useCycle()
 
 const W = 280
 const H = 110
@@ -26,7 +26,7 @@ const serie = computed(() => {
   })
 })
 
-const maxY = computed(() => Math.max(enveloppeVariable.value, serie.value.at(-1)?.cumul || 0, 1))
+const maxY = computed(() => Math.max(enveloppeVariable.value, enveloppeVariablePrevu.value, serie.value.at(-1)?.cumul || 0, 1))
 
 function xFor(jour: number) {
   return PAD + (jour / Math.max(1, joursTotal.value)) * (W - PAD * 2)
@@ -53,6 +53,16 @@ const paceLine = computed(() => {
   return { x1, y1, x2, y2 }
 })
 
+const paceLinePrevu = computed(() => {
+  const x1 = xFor(0)
+  const y1 = yFor(0)
+  const x2 = xFor(joursTotal.value)
+  const y2 = yFor(enveloppeVariablePrevu.value)
+  return { x1, y1, x2, y2 }
+})
+
+const afficherPrevu = computed(() => enveloppeVariablePrevu.value !== enveloppeVariable.value)
+
 function formatMontant(n: number) {
   return n.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })
 }
@@ -68,6 +78,11 @@ function formatMontant(n: number) {
       <line
         :x1="paceLine.x1" :y1="paceLine.y1" :x2="paceLine.x2" :y2="paceLine.y2"
         class="stroke-slate-300 dark:stroke-slate-600" stroke-width="2" stroke-dasharray="4 4"
+      />
+      <line
+        v-if="afficherPrevu"
+        :x1="paceLinePrevu.x1" :y1="paceLinePrevu.y1" :x2="paceLinePrevu.x2" :y2="paceLinePrevu.y2"
+        class="stroke-[#9085e9] dark:stroke-[#7c6ee0]" stroke-width="2" stroke-dasharray="1 3"
       />
       <path v-if="serie.length" :d="aireChemin" class="fill-[#2a78d6] dark:fill-[#3987e5]" opacity="0.1" />
       <polyline
@@ -93,8 +108,12 @@ function formatMontant(n: number) {
           <span class="inline-block w-3 h-0.5 rounded-full bg-slate-300 dark:bg-slate-600" />
           Budget pace
         </span>
+        <span v-if="afficherPrevu" class="flex items-center gap-1.5">
+          <span class="inline-block w-3 h-0.5 rounded-full bg-[#9085e9] dark:bg-[#7c6ee0]" />
+          Forecast pace
+        </span>
       </span>
-      <span>€{{ formatMontant(enveloppeVariable) }} envelope</span>
+      <span>{{ formatMontant(enveloppeVariable) }} € envelope</span>
     </div>
   </div>
 </template>

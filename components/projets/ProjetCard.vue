@@ -48,7 +48,7 @@ async function remove() {
       <div class="flex-1 min-w-0">
         <p class="font-medium truncate">{{ projet.nom }}</p>
         <p class="text-xs text-slate-400">
-          €{{ formatMontant(projet.montantActuel) }} / €{{ formatMontant(projet.montantCible) }}
+          {{ formatMontant(projet.montantActuel) }} € / {{ formatMontant(projet.montantCible) }} €
         </p>
       </div>
       <div class="flex items-center gap-1 shrink-0">

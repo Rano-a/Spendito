@@ -23,6 +23,7 @@ onMounted(refresh)
         <DashboardResteGauge />
         <DashboardSpendingPie />
         <DashboardSpendingTrend />
+        <DashboardCashFlowSummary />
         <DashboardRecentActivity />
         <DashboardProjectPreviewCard />
         <DashboardProjectsOverview />

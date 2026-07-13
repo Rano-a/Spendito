@@ -26,6 +26,7 @@ export default defineEventHandler(async (event) => {
 
   await Transaction.create({
     montant: revenuTotal,
+    montantPrevu: revenuTotal,
     type: 'revenu',
     categorie: 'Salary',
     note: 'Cycle salary',
@@ -37,6 +38,7 @@ export default defineEventHandler(async (event) => {
   if (Array.isArray(depensesFixesSelectionnees) && depensesFixesSelectionnees.length) {
     const docs = depensesFixesSelectionnees.map((d: any) => ({
       montant: d.montant,
+      montantPrevu: d.montant,
       type: 'depense_fixe',
       categorie: d.categorie || '',
       note: d.nom,

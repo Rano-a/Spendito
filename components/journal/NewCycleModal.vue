@@ -102,7 +102,7 @@ async function valider() {
               >
               <span class="text-sm">{{ d.nom }}</span>
             </span>
-            <span class="text-sm font-medium text-slate-500">€{{ d.montantParDefaut.toFixed(2) }}</span>
+            <span class="text-sm font-medium text-slate-500">{{ d.montantParDefaut.toFixed(2) }} €</span>
           </label>
         </div>
       </div>
