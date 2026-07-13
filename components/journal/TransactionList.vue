@@ -98,14 +98,14 @@ async function confirmAdd() {
 
 <template>
   <div class="card overflow-hidden">
-    <div class="px-4 py-3 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between gap-2">
+    <div class="px-4 py-3 border-b border-slate-100 dark:border-white/10 flex items-center justify-between gap-2">
       <h3 class="text-sm font-medium text-slate-500 dark:text-slate-400">
         {{ titre }}
         <span v-if="trie.length" class="text-xs text-slate-400 font-normal">({{ trie.length }})</span>
       </h3>
       <button
         v-if="!adding && typeAjout"
-        class="flex items-center gap-1 text-sm font-medium text-indigo-600 dark:text-indigo-400"
+        class="flex items-center gap-1 text-sm font-medium text-indigo-600 dark:text-accent-violet-dark"
         @click="startAdd"
       >
         <Plus :size="16" />
@@ -113,7 +113,7 @@ async function confirmAdd() {
       </button>
     </div>
 
-    <div v-if="adding" class="flex flex-wrap items-center gap-2 py-3 px-4 border-b border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50">
+    <div v-if="adding" class="flex flex-wrap items-center gap-2 py-3 px-4 border-b border-slate-100 dark:border-white/10 bg-slate-50 dark:bg-white/5">
       <input
         v-model.number="montant"
         type="number"
@@ -133,7 +133,7 @@ async function confirmAdd() {
       <button class="btn-primary px-3 py-1.5" :disabled="!peutValider || saving" @click="confirmAdd">
         {{ saving ? '...' : 'Add' }}
       </button>
-      <button class="p-1.5 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-400" @click="adding = false">
+      <button class="p-1.5 rounded-full hover:bg-slate-200 dark:hover:bg-white/10 text-slate-400" @click="adding = false">
         Cancel
       </button>
     </div>
@@ -142,7 +142,7 @@ async function confirmAdd() {
       No transactions.
     </div>
     <div v-for="groupe in groupes" :key="groupe.label + groupe.items[0]._id">
-      <div class="sticky top-0 z-10 flex items-center justify-between gap-2 px-4 py-1.5 bg-slate-100/90 dark:bg-slate-800/90 backdrop-blur text-xs font-medium text-slate-500 dark:text-slate-400 capitalize">
+      <div class="sticky top-0 z-10 flex items-center justify-between gap-2 px-4 py-1.5 bg-slate-100/90 dark:bg-slate-900/90 backdrop-blur-xl text-xs font-medium text-slate-500 dark:text-slate-400 capitalize">
         <span>{{ groupe.label }}</span>
         <span :class="groupe.total >= 0 ? 'text-good' : 'text-slate-500 dark:text-slate-400'">
           {{ groupe.total >= 0 ? '+' : '' }}{{ groupe.total.toFixed(2) }} €
@@ -153,14 +153,14 @@ async function confirmAdd() {
 
     <button
       v-if="masquees > 0"
-      class="w-full flex items-center justify-center gap-1.5 py-2.5 text-sm font-medium text-indigo-600 dark:text-indigo-400 border-t border-slate-100 dark:border-slate-800"
+      class="w-full flex items-center justify-center gap-1.5 py-2.5 text-sm font-medium text-indigo-600 dark:text-accent-violet-dark border-t border-slate-100 dark:border-white/10"
       @click="expanded = !expanded"
     >
       <component :is="expanded ? ChevronUp : ChevronDown" :size="16" />
       {{ expanded ? 'Show less' : `Show ${masquees} more` }}
     </button>
 
-    <div v-if="trie.length" class="flex items-center justify-between gap-2 px-4 py-2.5 border-t border-slate-200 dark:border-slate-700 text-sm font-semibold">
+    <div v-if="trie.length" class="flex items-center justify-between gap-2 px-4 py-2.5 border-t border-slate-200 dark:border-white/10 text-sm font-semibold">
       <span>Total</span>
       <span :class="total >= 0 ? 'text-good' : 'text-slate-700 dark:text-slate-200'">
         {{ total >= 0 ? '+' : '' }}{{ total.toFixed(2) }} €

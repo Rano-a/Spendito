@@ -2,10 +2,10 @@
 const { totalRevenu, totalDepensesVariables, totalDepensesFixes, totalEpargne, totalDepensesFixesPrevu } = useCycle()
 
 const tuiles = computed(() => [
-  { label: 'Income', valeur: totalRevenu.value, dot: 'bg-good' },
-  { label: 'Expenses', valeur: totalDepensesVariables.value, dot: 'bg-[#2a78d6] dark:bg-[#3987e5]' },
-  { label: 'Bills', valeur: totalDepensesFixes.value, dot: 'bg-[#1baf7a] dark:bg-[#199e70]', prevu: totalDepensesFixesPrevu.value },
-  { label: 'Savings', valeur: totalEpargne.value, dot: 'bg-[#4a3aa7] dark:bg-[#9085e9]' }
+  { label: 'Income', valeur: totalRevenu.value, dot: 'bg-good', glow: 'shadow-soft-good dark:shadow-glow-good' },
+  { label: 'Expenses', valeur: totalDepensesVariables.value, dot: 'bg-[#2a78d6] dark:bg-[#3987e5]', glow: 'shadow-soft-blue dark:shadow-glow-blue' },
+  { label: 'Bills', valeur: totalDepensesFixes.value, dot: 'bg-[#eb6834] dark:bg-[#d95926]', prevu: totalDepensesFixesPrevu.value, glow: 'shadow-soft-orange dark:shadow-glow-orange' },
+  { label: 'Savings', valeur: totalEpargne.value, dot: 'bg-[#4a3aa7] dark:bg-[#9085e9]', glow: 'shadow-soft-violet dark:shadow-glow-violet' }
 ])
 
 function formatMontant(n: number) {
@@ -15,7 +15,7 @@ function formatMontant(n: number) {
 
 <template>
   <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-    <div v-for="t in tuiles" :key="t.label" class="card p-3.5">
+    <div v-for="t in tuiles" :key="t.label" class="card p-3.5" :class="t.glow">
       <div class="flex items-center gap-1.5 mb-1.5">
         <span class="w-2 h-2 rounded-full shrink-0" :class="t.dot" />
         <p class="text-xs text-slate-500 dark:text-slate-400 truncate">{{ t.label }}</p>

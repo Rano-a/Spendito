@@ -7,21 +7,38 @@ html {
 }
 
 body {
-  @apply bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100;
+  @apply bg-slate-50 text-slate-900 dark:bg-[#05070d] dark:text-slate-100;
 }
 
-.card {
-  @apply rounded-xl2 bg-white dark:bg-slate-900 shadow-sm border border-slate-100 dark:border-slate-800;
+body {
+  background-image: radial-gradient(ellipse 80% 50% at 15% 0%, rgba(74,58,167,0.05), transparent),
+    radial-gradient(ellipse 80% 50% at 85% 20%, rgba(42,120,214,0.04), transparent);
+  background-attachment: fixed;
 }
 
-.btn-primary {
-  @apply inline-flex items-center justify-center gap-2 rounded-full bg-indigo-600 text-white font-medium hover:bg-indigo-500 active:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed;
+.dark body {
+  background-image: radial-gradient(ellipse 80% 50% at 15% 0%, rgba(74,58,167,0.18), transparent),
+    radial-gradient(ellipse 80% 50% at 85% 20%, rgba(42,120,214,0.14), transparent);
+  background-attachment: fixed;
 }
 
-.btn-secondary {
-  @apply inline-flex items-center justify-center gap-2 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 font-medium hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors;
-}
+@layer components {
+  .card {
+    @apply rounded-xl2 bg-white shadow-card-light border border-slate-100
+      dark:bg-slate-900/60 dark:backdrop-blur-xl dark:border-white/10 dark:shadow-[0_0_0_1px_rgba(255,255,255,0.03)];
+  }
 
-.input {
-  @apply w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500;
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-indigo-600 text-white font-medium hover:bg-indigo-500 active:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed
+      shadow-soft-violet dark:shadow-glow-violet;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-slate-100 dark:bg-white/5 text-slate-700 dark:text-slate-200 font-medium hover:bg-slate-200 dark:hover:bg-white/10 transition-colors dark:border dark:border-white/10;
+  }
+
+  .input {
+    @apply w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500
+      dark:border-white/10 dark:bg-white/5 dark:focus:ring-accent-violet-dark;
+  }
 }

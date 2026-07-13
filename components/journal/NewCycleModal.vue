@@ -91,12 +91,12 @@ async function valider() {
           <label
             v-for="d in depensesRegulieres"
             :key="d._id"
-            class="flex items-center justify-between gap-3 p-3 rounded-lg border border-slate-200 dark:border-slate-700 cursor-pointer"
+            class="flex items-center justify-between gap-3 p-3 rounded-lg border border-slate-200 dark:border-white/10 dark:hover:bg-white/5 cursor-pointer transition-colors"
           >
             <span class="flex items-center gap-2">
               <input
                 type="checkbox"
-                class="rounded"
+                class="rounded w-4 h-4 accent-[#4a3aa7] dark:accent-[#9085e9]"
                 :checked="selection.has(d._id)"
                 @change="toggle(d._id)"
               >

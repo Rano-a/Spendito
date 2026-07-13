@@ -7,9 +7,9 @@ const {
 } = useCycle()
 
 const ambianceConfig = computed(() => ({
-  vert: { icon: Sun, label: 'Smooth sailing', text: 'text-good', ring: 'stroke-good' },
-  orange: { icon: CloudSun, label: 'Tightening up', text: 'text-warn', ring: 'stroke-warn' },
-  rouge: { icon: CloudRain, label: 'Over budget', text: 'text-bad', ring: 'stroke-bad' }
+  vert: { icon: Sun, label: 'Smooth sailing', text: 'text-good', ring: 'stroke-good', glow: 'dark:drop-shadow-[0_0_6px_rgba(34,197,94,0.7)]' },
+  orange: { icon: CloudSun, label: 'Tightening up', text: 'text-warn', ring: 'stroke-warn', glow: 'dark:drop-shadow-[0_0_6px_rgba(245,158,11,0.7)]' },
+  rouge: { icon: CloudRain, label: 'Over budget', text: 'text-bad', ring: 'stroke-bad', glow: 'dark:drop-shadow-[0_0_6px_rgba(239,68,68,0.7)]' }
 }[ambiance.value]))
 
 const R = 42
@@ -31,11 +31,11 @@ function formatMontant(n: number) {
     </div>
 
     <div class="relative w-52 h-52 mx-auto">
-      <svg viewBox="0 0 100 100" class="w-full h-full -rotate-90">
+      <svg viewBox="0 0 100 100" class="w-full h-full -rotate-90 overflow-visible">
         <circle cx="50" cy="50" :r="R" fill="none" stroke-width="9" class="stroke-slate-100 dark:stroke-slate-800" />
         <circle
           cx="50" cy="50" :r="R" fill="none" stroke-width="9" stroke-linecap="round"
-          :class="ambianceConfig.ring"
+          :class="[ambianceConfig.ring, ambianceConfig.glow]"
           :stroke-dasharray="CIRC"
           :stroke-dashoffset="dashoffset"
           style="transition: stroke-dashoffset 0.5s ease"

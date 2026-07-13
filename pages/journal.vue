@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Sparkles, Pencil, Check, X } from 'lucide-vue-next'
+import { Sparkles, Pencil, Check, X, CalendarDays } from 'lucide-vue-next'
 
 const { cycleActif, refresh, modifierCycle } = useCycle()
 const showNewCycle = ref(false)
@@ -35,20 +35,25 @@ async function saveDate() {
         <button class="p-1.5 rounded-full hover:bg-good-bg text-good" :disabled="savingDate" @click="saveDate">
           <Check :size="16" />
         </button>
-        <button class="p-1.5 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400" @click="editingDate = false">
+        <button class="p-1.5 rounded-full hover:bg-slate-100 dark:hover:bg-white/10 text-slate-400" @click="editingDate = false">
           <X :size="16" />
         </button>
       </div>
-      <div v-else>
-        <h2 class="font-semibold">This month</h2>
-        <p class="text-sm text-slate-400 flex items-center gap-1.5" v-if="cycleActif">
-          Started {{ new Date(cycleActif.dateDebut).toLocaleDateString('en-US') }} ·
-          ends {{ new Date(cycleActif.dateFinPrevue).toLocaleDateString('en-US') }}
-          <button class="p-1 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400" @click="startEditDate">
-            <Pencil :size="13" />
-          </button>
-        </p>
-        <p class="text-sm text-slate-400" v-else>No active month</p>
+      <div v-else class="flex items-center gap-3">
+        <span class="shrink-0 w-10 h-10 rounded-full flex items-center justify-center bg-[#4a3aa7]/15 text-[#4a3aa7] dark:bg-[#9085e9]/15 dark:text-[#9085e9] dark:shadow-glow-violet">
+          <CalendarDays :size="18" />
+        </span>
+        <div>
+          <h2 class="font-semibold">This month</h2>
+          <p class="text-sm text-slate-400 flex items-center gap-1.5" v-if="cycleActif">
+            Started {{ new Date(cycleActif.dateDebut).toLocaleDateString('en-US') }} ·
+            ends {{ new Date(cycleActif.dateFinPrevue).toLocaleDateString('en-US') }}
+            <button class="p-1 rounded-full hover:bg-slate-100 dark:hover:bg-white/10 text-slate-400" @click="startEditDate">
+              <Pencil :size="13" />
+            </button>
+          </p>
+          <p class="text-sm text-slate-400" v-else>No active month</p>
+        </div>
       </div>
       <button class="btn-primary px-4 py-2 shrink-0" @click="showNewCycle = true">
         <Sparkles :size="16" />

@@ -2,9 +2,9 @@
 const { totalDepensesVariables, totalDepensesFixes, totalEpargne } = useCycle()
 
 const CATS = [
-  { label: 'Expenses', dot: 'bg-[#2a78d6] dark:bg-[#3987e5]', stroke: 'stroke-[#2a78d6] dark:stroke-[#3987e5]' },
-  { label: 'Bills', dot: 'bg-[#1baf7a] dark:bg-[#199e70]', stroke: 'stroke-[#1baf7a] dark:stroke-[#199e70]' },
-  { label: 'Savings & projects', dot: 'bg-[#4a3aa7] dark:bg-[#9085e9]', stroke: 'stroke-[#4a3aa7] dark:stroke-[#9085e9]' }
+  { label: 'Expenses', dot: 'bg-[#2a78d6] dark:bg-[#3987e5]', stroke: 'stroke-[#2a78d6] dark:stroke-[#3987e5] dark:drop-shadow-[0_0_5px_rgba(57,135,229,0.7)]' },
+  { label: 'Bills', dot: 'bg-[#eb6834] dark:bg-[#d95926]', stroke: 'stroke-[#eb6834] dark:stroke-[#d95926] dark:drop-shadow-[0_0_5px_rgba(217,89,38,0.7)]' },
+  { label: 'Savings & projects', dot: 'bg-[#4a3aa7] dark:bg-[#9085e9]', stroke: 'stroke-[#4a3aa7] dark:stroke-[#9085e9] dark:drop-shadow-[0_0_5px_rgba(144,133,233,0.7)]' }
 ]
 
 const R = 38
@@ -54,7 +54,7 @@ function pourcentage(valeur: number) {
 
     <div class="flex flex-col sm:flex-row items-center gap-6">
       <div class="relative w-36 h-36 shrink-0">
-        <svg viewBox="0 0 100 100" class="w-full h-full -rotate-90">
+        <svg viewBox="0 0 100 100" class="w-full h-full -rotate-90 overflow-visible">
           <circle cx="50" cy="50" :r="R" fill="none" :stroke-width="STROKE" class="stroke-slate-100 dark:stroke-slate-800" />
           <circle
             v-for="s in segments"

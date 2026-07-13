@@ -23,48 +23,56 @@ function isActive(path: string) {
 </script>
 
 <template>
-  <!-- Desktop top nav -->
-  <nav class="hidden sm:flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-slate-800">
-    <div class="flex items-center gap-2 font-semibold text-lg">
-      <PiggyBank :size="22" class="text-indigo-500" />
-      Budgeto
+  <!-- Desktop left sidebar -->
+  <nav
+    class="hidden sm:flex sm:flex-col fixed left-0 top-0 h-screen w-20 lg:w-56 shrink-0 z-20
+      border-r border-slate-100 dark:border-white/10 bg-white dark:bg-slate-900/60 dark:backdrop-blur-xl"
+  >
+    <div class="flex items-center gap-2 font-semibold text-lg px-4 lg:px-6 py-5 justify-center lg:justify-start">
+      <PiggyBank :size="24" class="text-indigo-500 dark:text-accent-violet-dark shrink-0" />
+      <span class="hidden lg:inline">Budgeto</span>
     </div>
-    <div class="flex items-center gap-1">
+    <div class="flex-1 flex flex-col gap-1 px-2 lg:px-3 mt-2">
       <NuxtLink
         v-for="link in links"
         :key="link.to"
         :to="link.to"
-        class="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-colors"
-        :class="isActive(link.to) ? 'bg-indigo-600 text-white' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'"
+        class="flex items-center gap-3 px-3 lg:px-4 py-2.5 rounded-full text-sm font-medium transition-colors justify-center lg:justify-start"
+        :class="isActive(link.to)
+          ? 'bg-indigo-600 text-white dark:bg-white/10 dark:text-white dark:border dark:border-accent-violet-dark/60 dark:shadow-glow-violet'
+          : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/5'"
       >
-        <component :is="link.icon" :size="16" />
-        {{ link.label }}
+        <component :is="link.icon" :size="18" class="shrink-0" />
+        <span class="hidden lg:inline">{{ link.label }}</span>
       </NuxtLink>
     </div>
-    <div class="flex items-center gap-2">
-      <span v-if="user" class="text-sm text-slate-500 dark:text-slate-400 hidden md:inline">{{ user.name }}</span>
+    <div class="flex flex-col gap-1 px-2 lg:px-3 py-4 border-t border-slate-100 dark:border-white/10">
+      <span v-if="user" class="hidden lg:block px-4 pb-2 text-xs text-slate-500 dark:text-slate-400 truncate">{{ user.name }}</span>
       <NuxtLink
         to="/settings"
-        class="p-2 rounded-full transition-colors"
-        :class="isActive('/settings') ? 'bg-indigo-600 text-white' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'"
+        class="flex items-center gap-3 px-3 lg:px-4 py-2.5 rounded-full text-sm font-medium transition-colors justify-center lg:justify-start"
+        :class="isActive('/settings')
+          ? 'bg-indigo-600 text-white dark:bg-white/10 dark:text-white dark:border dark:border-accent-violet-dark/60 dark:shadow-glow-violet'
+          : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/5'"
       >
-        <Settings :size="18" />
+        <Settings :size="18" class="shrink-0" />
+        <span class="hidden lg:inline">Settings</span>
       </NuxtLink>
       <button
-        class="p-2 rounded-full text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+        class="flex items-center gap-3 px-3 lg:px-4 py-2.5 rounded-full text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/5 transition-colors justify-center lg:justify-start"
         aria-label="Log out"
         @click="handleLogout"
       >
-        <LogOut :size="18" />
+        <LogOut :size="18" class="shrink-0" />
+        <span class="hidden lg:inline">Log out</span>
       </button>
-      <LayoutThemeToggle />
     </div>
   </nav>
 
   <!-- Mobile top bar -->
-  <div class="flex sm:hidden items-center justify-between px-4 py-3 border-b border-slate-100 dark:border-slate-800">
+  <div class="flex sm:hidden items-center justify-between px-4 py-3 border-b border-slate-100 dark:border-white/10 dark:bg-slate-900/60 dark:backdrop-blur-xl">
     <div class="flex items-center gap-2 font-semibold">
-      <PiggyBank :size="20" class="text-indigo-500" />
+      <PiggyBank :size="20" class="text-indigo-500 dark:text-accent-violet-dark" />
       Budgeto
     </div>
     <div class="flex items-center gap-1">
@@ -78,18 +86,17 @@ function isActive(path: string) {
       <button class="p-2 rounded-full text-slate-400" aria-label="Log out" @click="handleLogout">
         <LogOut :size="18" />
       </button>
-      <LayoutThemeToggle />
     </div>
   </div>
 
   <!-- Mobile bottom nav -->
-  <nav class="fixed sm:hidden bottom-0 inset-x-0 z-30 bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800 flex items-center justify-around py-2 pb-safe">
+  <nav class="fixed sm:hidden bottom-0 inset-x-0 z-30 bg-white dark:bg-slate-900/80 dark:backdrop-blur-xl border-t border-slate-100 dark:border-white/10 flex items-center justify-around py-2 pb-safe">
     <NuxtLink
       v-for="link in links"
       :key="link.to"
       :to="link.to"
       class="flex flex-col items-center gap-1 px-4 py-1 text-xs font-medium"
-      :class="isActive(link.to) ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-400'"
+      :class="isActive(link.to) ? 'text-indigo-600 dark:text-accent-violet-dark' : 'text-slate-400'"
     >
       <component :is="link.icon" :size="20" />
       {{ link.label }}

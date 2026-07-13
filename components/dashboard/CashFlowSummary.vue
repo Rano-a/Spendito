@@ -6,21 +6,21 @@ const categories = computed(() => [
     label: 'Expenses',
     planned: enveloppeVariable.value,
     actual: totalDepensesVariables.value,
-    solid: 'bg-[#2a78d6] dark:bg-[#3987e5]',
+    solid: 'bg-[#2a78d6] dark:bg-[#3987e5] shadow-soft-blue dark:shadow-glow-blue',
     light: 'bg-[#2a78d6]/25 dark:bg-[#3987e5]/25'
   },
   {
     label: 'Bills',
     planned: totalDepensesFixesPrevu.value,
     actual: totalDepensesFixes.value,
-    solid: 'bg-[#1baf7a] dark:bg-[#199e70]',
-    light: 'bg-[#1baf7a]/25 dark:bg-[#199e70]/25'
+    solid: 'bg-[#eb6834] dark:bg-[#d95926] shadow-soft-orange dark:shadow-glow-orange',
+    light: 'bg-[#eb6834]/25 dark:bg-[#d95926]/25'
   },
   {
     label: 'Savings',
     planned: totalEpargne.value,
     actual: totalEpargne.value,
-    solid: 'bg-[#4a3aa7] dark:bg-[#9085e9]',
+    solid: 'bg-[#4a3aa7] dark:bg-[#9085e9] shadow-soft-violet dark:shadow-glow-violet',
     light: 'bg-[#4a3aa7]/25 dark:bg-[#9085e9]/25'
   }
 ])
@@ -57,13 +57,13 @@ function formatMontant(n: number) {
         <p class="text-xs font-medium text-slate-500 dark:text-slate-400 mb-1.5">{{ cat.label }}</p>
         <div class="space-y-1">
           <div class="flex items-center gap-2">
-            <div class="flex-1 h-2.5 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
+            <div class="flex-1 h-2.5 rounded-full bg-slate-100 dark:bg-slate-800">
               <div class="h-full rounded-full transition-all" :class="cat.light" :style="{ width: pct(cat.planned) + '%' }" />
             </div>
             <span class="text-xs text-slate-400 w-16 text-right shrink-0 tabular-nums">{{ formatMontant(cat.planned) }} €</span>
           </div>
           <div class="flex items-center gap-2">
-            <div class="flex-1 h-2.5 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
+            <div class="flex-1 h-2.5 rounded-full bg-slate-100 dark:bg-slate-800">
               <div class="h-full rounded-full transition-all" :class="cat.solid" :style="{ width: pct(cat.actual) + '%' }" />
             </div>
             <span class="text-xs font-medium text-slate-700 dark:text-slate-200 w-16 text-right shrink-0 tabular-nums">{{ formatMontant(cat.actual) }} €</span>
