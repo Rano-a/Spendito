@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { Home, BookOpen, PiggyBank, CalendarCheck, Settings, TrendingUp, LogOut, History } from 'lucide-vue-next'
+import { Home, BookOpen, PiggyBank, CalendarCheck, Settings, TrendingUp, LogOut, History, Sun, Moon } from 'lucide-vue-next'
 
 const route = useRoute()
 const { user, logout } = useAuth()
+const { isDark, toggle: toggleTheme } = useTheme()
 
 async function handleLogout() {
   await logout()
@@ -86,6 +87,14 @@ function isActive(path: string) {
       Budgeto
     </div>
     <div class="flex items-center gap-1">
+      <button
+        class="p-2 rounded-full text-slate-400 transition-colors"
+        :aria-label="isDark ? 'Switch to light mode' : 'Switch to dark mode'"
+        @click="toggleTheme"
+      >
+        <Sun v-if="isDark" :size="18" />
+        <Moon v-else :size="18" />
+      </button>
       <NuxtLink
         to="/history"
         class="p-2 rounded-full transition-colors"
