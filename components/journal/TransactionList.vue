@@ -18,17 +18,30 @@ const trie = computed(() =>
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
 )
 
-function libelleJour(iso: string) {
-  const d = new Date(iso)
-  const aujourdHui = new Date()
-  const hier = new Date()
-  hier.setDate(hier.getDate() - 1)
-  const meme = (a: Date, b: Date) =>
-    a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate()
+function localDateStr(d: Date) {
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+}
 
-  if (meme(d, aujourdHui)) return 'Today'
-  if (meme(d, hier)) return 'Yesterday'
-  return d.toLocaleDateString('en-US', { weekday: 'long', day: 'numeric', month: 'long' })
+function libelleJour(iso: string) {
+  // Transaction dates are stored as UTC midnight representing a calendar day
+  // the user picked, not a real instant — slicing the ISO string gives that
+  // intended day directly. Comparing against local Today/Yesterday strings
+  // (rather than constructing Date objects and using local get*() methods)
+  // avoids a same-day transaction reading as "Yesterday" for users west of
+  // UTC, where UTC midnight falls on the previous local calendar day.
+  const cle = iso.slice(0, 10)
+  const maintenant = new Date()
+  const aujourdHui = localDateStr(maintenant)
+  const hier = new Date(maintenant)
+  hier.setDate(hier.getDate() - 1)
+
+  if (cle === aujourdHui) return 'Today'
+  if (cle === localDateStr(hier)) return 'Yesterday'
+
+  const [annee, mois, jour] = cle.split('-').map(Number)
+  return new Date(Date.UTC(annee, mois - 1, jour)).toLocaleDateString('en-US', {
+    weekday: 'long', day: 'numeric', month: 'long', timeZone: 'UTC'
+  })
 }
 
 function grouperParJour(liste: typeof trie.value) {
@@ -59,6 +72,7 @@ const total = computed(() =>
 const categories = ref<{ _id: string, nom: string }[]>([])
 const adding = ref(false)
 const saving = ref(false)
+const addError = ref('')
 const montant = ref<number | null>(null)
 const categorie = ref('')
 const note = ref('')
@@ -80,6 +94,7 @@ const peutValider = computed(() => !!montant.value && montant.value > 0 && !!cyc
 async function confirmAdd() {
   if (!peutValider.value) return
   saving.value = true
+  addError.value = ''
   try {
     await ajouterTransaction({
       montant: montant.value as number,
@@ -90,6 +105,8 @@ async function confirmAdd() {
       cycleId: cycleActif.value!._id
     })
     adding.value = false
+  } catch (e: any) {
+    addError.value = e?.data?.statusMessage || 'Something went wrong'
   } finally {
     saving.value = false
   }
@@ -137,6 +154,7 @@ async function confirmAdd() {
         Cancel
       </button>
     </div>
+    <p v-if="addError" class="text-xs text-bad px-4 pt-2">{{ addError }}</p>
 
     <div v-if="!trie.length && !adding" class="p-6 text-center text-sm text-slate-400">
       No transactions.

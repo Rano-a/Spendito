@@ -34,6 +34,15 @@ export async function verifyPassword(password: string, hash: string) {
   return bcrypt.compare(password, hash)
 }
 
+export function assertStrongPassword(password: string) {
+  if (password.length < 8 || !/[a-zA-Z]/.test(password) || !/[0-9]/.test(password)) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: 'Password must be at least 8 characters and include both letters and numbers'
+    })
+  }
+}
+
 // A real bcrypt hash of a password nobody will ever type, used to keep the
 // login timing the same whether or not the email exists — otherwise a
 // nonexistent email returns near-instantly (no hash to compare against)

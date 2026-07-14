@@ -133,14 +133,20 @@ export function useCycle() {
 
   const moisCouvert = computed(() => {
     if (!cycleActif.value) return null
+    // Dates are stored as UTC midnight representing a calendar day chosen by
+    // the user (via a plain <input type=date>), not a real instant — bucket
+    // by UTC calendar fields so this doesn't shift by a day for users west of
+    // UTC (local getFullYear/getMonth/getDate would roll UTC midnight back to
+    // the previous local day).
     const debut = new Date(cycleActif.value.dateDebut)
     const fin = new Date(cycleActif.value.dateFinPrevue)
     const joursParMois = new Map<string, number>()
-    const curseur = new Date(debut)
-    while (curseur <= fin) {
-      const cle = `${curseur.getFullYear()}-${curseur.getMonth()}`
+    const curseur = new Date(Date.UTC(debut.getUTCFullYear(), debut.getUTCMonth(), debut.getUTCDate()))
+    const finUTC = Date.UTC(fin.getUTCFullYear(), fin.getUTCMonth(), fin.getUTCDate())
+    while (curseur.getTime() <= finUTC) {
+      const cle = `${curseur.getUTCFullYear()}-${curseur.getUTCMonth()}`
       joursParMois.set(cle, (joursParMois.get(cle) || 0) + 1)
-      curseur.setDate(curseur.getDate() + 1)
+      curseur.setUTCDate(curseur.getUTCDate() + 1)
     }
     let meilleureCle = ''
     let max = -1
@@ -151,7 +157,7 @@ export function useCycle() {
       }
     }
     const [annee, mois] = meilleureCle.split('-').map(Number)
-    return new Date(annee, mois, 1).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
+    return new Date(Date.UTC(annee, mois, 1)).toLocaleDateString('en-US', { month: 'long', year: 'numeric', timeZone: 'UTC' })
   })
 
   const ambiance = computed<'vert' | 'orange' | 'rouge'>(() => {

@@ -11,6 +11,9 @@ export default defineEventHandler(async (event) => {
   let projet
 
   if (typeof body.delta === 'number') {
+    if (!Number.isFinite(body.delta)) {
+      throw createError({ statusCode: 400, statusMessage: 'delta must be a finite number' })
+    }
     projet = await ProjetEpargne.findOne({ _id: id, userId })
     if (!projet) {
       throw createError({ statusCode: 404, statusMessage: 'Project not found' })
@@ -18,6 +21,8 @@ export default defineEventHandler(async (event) => {
     projet.montantActuel = Math.max(0, projet.montantActuel + body.delta)
     await projet.save()
   } else {
+    if (body.montantCible !== undefined) assertPositiveNumber(body.montantCible, 'montantCible')
+    if (body.montantActuel !== undefined) assertNonNegativeNumber(body.montantActuel, 'montantActuel')
     projet = await ProjetEpargne.findOneAndUpdate({ _id: id, userId }, body, { new: true })
     if (!projet) {
       throw createError({ statusCode: 404, statusMessage: 'Project not found' })

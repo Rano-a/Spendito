@@ -16,9 +16,12 @@ export default defineEventHandler(async (event) => {
   if (!email || !password || !name) {
     throw createError({ statusCode: 400, statusMessage: 'email, password and name are required' })
   }
-  if (password.length < 6) {
-    throw createError({ statusCode: 400, statusMessage: 'Password must be at least 6 characters' })
-  }
+  assertStrongPassword(password)
+
+  const ip = getRequestIP(event, { xForwardedFor: true }) || 'unknown'
+  // Slows down both mass account creation and email-enumeration scanning
+  // (the 409 below reveals whether an email is already registered).
+  await enforceRateLimit(`register:ip:${ip}`, 10, 60 * 60 * 1000)
 
   const existing = await User.findOne({ email })
   if (existing) {

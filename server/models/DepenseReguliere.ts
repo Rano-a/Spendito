@@ -8,4 +8,6 @@ const DepenseReguliereSchema = new Schema({
   userId: { type: Schema.Types.ObjectId, ref: 'User' }
 }, { timestamps: true })
 
+DepenseReguliereSchema.index({ userId: 1 })
+
 export const DepenseReguliere = models.DepenseReguliere || model('DepenseReguliere', DepenseReguliereSchema)

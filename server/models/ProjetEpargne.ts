@@ -11,4 +11,6 @@ const ProjetEpargneSchema = new Schema({
   userId: { type: Schema.Types.ObjectId, ref: 'User' }
 }, { timestamps: true })
 
+ProjetEpargneSchema.index({ userId: 1 })
+
 export const ProjetEpargne = models.ProjetEpargne || model('ProjetEpargne', ProjetEpargneSchema)

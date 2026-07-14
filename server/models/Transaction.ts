@@ -18,4 +18,7 @@ const TransactionSchema = new Schema({
   userId: { type: Schema.Types.ObjectId, ref: 'User' }
 }, { timestamps: true })
 
+// Covers the `{ userId, cycleId }` filter every dashboard/journal load queries by.
+TransactionSchema.index({ userId: 1, cycleId: 1 })
+
 export const Transaction = models.Transaction || model('Transaction', TransactionSchema)

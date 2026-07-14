@@ -8,9 +8,11 @@ export default defineEventHandler(async (event) => {
   const body = await readBody(event)
   const { montant, montantPrevu, type, categorie, note, date, cycleId } = body
 
-  if (!montant || !cycleId) {
-    throw createError({ statusCode: 400, statusMessage: 'montant and cycleId are required' })
+  if (!cycleId) {
+    throw createError({ statusCode: 400, statusMessage: 'cycleId is required' })
   }
+  assertPositiveNumber(montant, 'montant')
+  if (montantPrevu !== undefined) assertPositiveNumber(montantPrevu, 'montantPrevu')
 
   const owned = await Cycle.exists({ _id: cycleId, userId })
   if (!owned) {

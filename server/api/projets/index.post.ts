@@ -7,9 +7,11 @@ export default defineEventHandler(async (event) => {
   const body = await readBody(event)
   const { nom, montantCible, montantActuel, icone, couleur, principal } = body
 
-  if (!nom || !montantCible) {
-    throw createError({ statusCode: 400, statusMessage: 'nom and montantCible are required' })
+  if (!nom) {
+    throw createError({ statusCode: 400, statusMessage: 'nom is required' })
   }
+  assertPositiveNumber(montantCible, 'montantCible')
+  if (montantActuel !== undefined) assertNonNegativeNumber(montantActuel, 'montantActuel')
 
   return ProjetEpargne.create({
     nom,

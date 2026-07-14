@@ -7,6 +7,7 @@ export default defineEventHandler(async (event) => {
   const id = getRouterParam(event, 'id')
   const body = await readBody(event)
   delete body.userId
+  if (body.revenuTotal !== undefined) assertPositiveNumber(body.revenuTotal, 'revenuTotal')
 
   const cycle = await Cycle.findOneAndUpdate({ _id: id, userId }, body, { new: true })
   if (!cycle) {

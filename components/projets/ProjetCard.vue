@@ -9,6 +9,7 @@ const emit = defineEmits<{ edit: [] }>()
 const { ajusterMontant, supprimerProjet } = useProjets()
 
 const montantAjustement = ref<number | null>(null)
+const error = ref('')
 
 const progress = computed(() => props.projet.montantActuel / props.projet.montantCible)
 const complet = computed(() => progress.value >= 1)
@@ -21,18 +22,33 @@ function formatMontant(n: number) {
 
 async function ajouter() {
   if (!montantAjustement.value) return
-  await ajusterMontant(props.projet._id, montantAjustement.value)
-  montantAjustement.value = null
+  error.value = ''
+  try {
+    await ajusterMontant(props.projet._id, montantAjustement.value)
+    montantAjustement.value = null
+  } catch (e: any) {
+    error.value = e?.data?.statusMessage || 'Something went wrong'
+  }
 }
 
 async function retirer() {
   if (!montantAjustement.value) return
-  await ajusterMontant(props.projet._id, -montantAjustement.value)
-  montantAjustement.value = null
+  error.value = ''
+  try {
+    await ajusterMontant(props.projet._id, -montantAjustement.value)
+    montantAjustement.value = null
+  } catch (e: any) {
+    error.value = e?.data?.statusMessage || 'Something went wrong'
+  }
 }
 
 async function remove() {
-  await supprimerProjet(props.projet._id)
+  error.value = ''
+  try {
+    await supprimerProjet(props.projet._id)
+  } catch (e: any) {
+    error.value = e?.data?.statusMessage || 'Something went wrong'
+  }
 }
 </script>
 
@@ -82,5 +98,6 @@ async function remove() {
         <Minus :size="15" />
       </button>
     </div>
+    <p v-if="error" class="mt-2 text-xs text-bad">{{ error }}</p>
   </div>
 </template>

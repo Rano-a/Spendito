@@ -7,9 +7,10 @@ export default defineEventHandler(async (event) => {
   const body = await readBody(event)
   const { nom, montantParDefaut, categorie } = body
 
-  if (!nom || !montantParDefaut) {
-    throw createError({ statusCode: 400, statusMessage: 'nom and montantParDefaut are required' })
+  if (!nom) {
+    throw createError({ statusCode: 400, statusMessage: 'nom is required' })
   }
+  assertPositiveNumber(montantParDefaut, 'montantParDefaut')
 
   return DepenseReguliere.create({ nom, montantParDefaut, categorie: categorie || '', userId })
 })

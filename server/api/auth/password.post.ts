@@ -11,9 +11,9 @@ export default defineEventHandler(async (event) => {
   if (!currentPassword || !newPassword) {
     throw createError({ statusCode: 400, statusMessage: 'currentPassword and newPassword are required' })
   }
-  if (newPassword.length < 6) {
-    throw createError({ statusCode: 400, statusMessage: 'New password must be at least 6 characters' })
-  }
+  assertStrongPassword(newPassword)
+
+  await enforceRateLimit(`password:${userId}`, 10, 15 * 60 * 1000)
 
   const user = await User.findById(userId)
   if (!user || !(await verifyPassword(currentPassword, user.passwordHash))) {

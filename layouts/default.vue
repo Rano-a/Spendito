@@ -1,13 +1,14 @@
 <script setup lang="ts">
 const { init } = useTheme()
-const { refresh } = useCycle()
 const route = useRoute()
 
 const wide = computed(() => route.path === '/')
 
+// Cycle data is fetched by each page itself (via useCycle().refresh() in
+// their own onMounted) — fetching it here too just doubled the initial
+// GET /api/cycles + GET /api/transactions round-trip for no benefit.
 onMounted(() => {
   init()
-  refresh()
 })
 </script>
 

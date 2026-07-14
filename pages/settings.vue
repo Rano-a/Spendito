@@ -53,7 +53,7 @@ const passwordError = ref('')
 const passwordSaved = ref(false)
 
 const peutChangerMdp = computed(() =>
-  !!currentPassword.value && newPassword.value.length >= 6 && newPassword.value === confirmPassword.value
+  !!currentPassword.value && newPassword.value.length >= 8 && newPassword.value === confirmPassword.value
 )
 
 async function savePassword() {
@@ -110,7 +110,8 @@ async function savePassword() {
       </div>
       <div>
         <label class="block text-sm font-medium mb-1">New password</label>
-        <input v-model="newPassword" type="password" autocomplete="new-password" minlength="6" class="input">
+        <input v-model="newPassword" type="password" autocomplete="new-password" minlength="8" class="input">
+        <p class="mt-1 text-xs text-slate-400">At least 8 characters, with letters and numbers.</p>
       </div>
       <div>
         <label class="block text-sm font-medium mb-1">Confirm new password</label>

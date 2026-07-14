@@ -5,17 +5,23 @@ const W = 280
 const H = 110
 const PAD = 4
 
+// Dates are stored as UTC midnight representing a calendar day, not a real
+// instant — bucketing via UTC fields keeps the day index stable regardless
+// of the viewer's local timezone/DST (local setHours(0,0,0,0) would roll UTC
+// midnight back to the previous local day for users west of UTC).
+function jourUTC(iso: string) {
+  const d = new Date(iso)
+  return Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate())
+}
+
 const serie = computed(() => {
   if (!cycleActif.value) return []
-  const debut = new Date(cycleActif.value.dateDebut)
-  debut.setHours(0, 0, 0, 0)
+  const debut = jourUTC(cycleActif.value.dateDebut)
   const total = joursTotal.value
   const parJour = new Array(total + 1).fill(0)
   for (const t of transactions.value) {
     if (t.type !== 'depense_variable') continue
-    const d = new Date(t.date)
-    d.setHours(0, 0, 0, 0)
-    const idx = Math.round((d.getTime() - debut.getTime()) / 86400000)
+    const idx = Math.round((jourUTC(t.date) - debut) / 86400000)
     if (idx >= 0 && idx <= total) parJour[idx] += t.montant
   }
   let cumul = 0

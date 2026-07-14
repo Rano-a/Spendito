@@ -1,10 +1,13 @@
 <script setup lang="ts">
+import { Eye, EyeOff } from 'lucide-vue-next'
+
 definePageMeta({ layout: 'auth' })
 
 const { login } = useAuth()
 
 const email = ref('')
 const password = ref('')
+const showPassword = ref(false)
 const saving = ref(false)
 const error = ref('')
 
@@ -32,7 +35,18 @@ async function submit() {
     </div>
     <div>
       <label class="block text-sm font-medium mb-1">Password</label>
-      <input v-model="password" type="password" required class="input" autocomplete="current-password">
+      <div class="relative">
+        <input
+          v-model="password" :type="showPassword ? 'text' : 'password'" required class="input pr-10"
+          autocomplete="current-password"
+        >
+        <button
+          type="button" class="absolute inset-y-0 right-0 flex items-center px-3 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
+          :aria-label="showPassword ? 'Hide password' : 'Show password'" @click="showPassword = !showPassword"
+        >
+          <component :is="showPassword ? EyeOff : Eye" :size="18" />
+        </button>
+      </div>
     </div>
 
     <p v-if="error" class="text-sm text-bad">{{ error }}</p>
