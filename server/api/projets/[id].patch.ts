@@ -2,6 +2,15 @@ import { ProjetEpargne } from '~/server/models/ProjetEpargne'
 import { Cycle } from '~/server/models/Cycle'
 import { Transaction } from '~/server/models/Transaction'
 
+// Savings already recorded on a cycle — the ceiling for how much a withdrawal
+// may take back out of it. A project can hold money put aside before it was
+// mirrored into transactions at all, or during an earlier cycle; recording the
+// full withdrawal against this month would drive its savings total negative.
+async function epargneDuCycle(userId: string, cycleId: unknown) {
+  const rows = await Transaction.find({ userId, cycleId, type: 'epargne' }).select('montant').lean()
+  return Math.max(0, rows.reduce((acc, t) => acc + t.montant, 0))
+}
+
 export default defineEventHandler(async (event) => {
   const userId = await requireUserId(event)
   await connectDB()
@@ -36,17 +45,20 @@ export default defineEventHandler(async (event) => {
     if (applique !== 0) {
       const cycle = await Cycle.findOne({ statut: 'actif', userId }).sort({ dateDebut: -1 })
       if (cycle) {
-        await Transaction.create({
-          montant: applique,
-          montantPrevu: applique,
-          type: 'epargne',
-          categorie: '',
-          note: projet.nom,
-          date: new Date(),
-          cycleId: cycle._id,
-          projetId: projet._id,
-          userId
-        })
+        const montant = applique > 0 ? applique : -Math.min(-applique, await epargneDuCycle(userId, cycle._id))
+        if (montant !== 0) {
+          await Transaction.create({
+            montant,
+            montantPrevu: montant,
+            type: 'epargne',
+            categorie: '',
+            note: projet.nom,
+            date: new Date(),
+            cycleId: cycle._id,
+            projetId: projet._id,
+            userId
+          })
+        }
       }
     }
   } else {
