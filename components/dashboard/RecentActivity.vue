@@ -25,7 +25,12 @@ const typeBubble: Record<string, string> = {
 }
 
 const recent = computed(() =>
-  [...transactions.value]
+  transactions.value
+    // An unpaid bill hasn't happened yet — it's this month's plan, not
+    // activity. Every bill for the month is created up front with a due date,
+    // so leaving them in let a wall of unconfirmed bills fill all six slots
+    // and hide the expenses and income that actually moved.
+    .filter(t => !(t.type === 'depense_fixe' && !t.paye))
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
     .slice(0, 6)
 )
@@ -42,7 +47,7 @@ function formatDate(d: string) {
 <template>
   <div class="card p-6">
     <h3 class="text-sm font-medium text-slate-500 dark:text-slate-400 mb-4">Recent activity</h3>
-    <div v-if="!recent.length" class="text-sm text-slate-400">No transactions yet.</div>
+    <div v-if="!recent.length" class="text-sm text-slate-400">No activity yet.</div>
     <div class="space-y-3">
       <div v-for="t in recent" :key="t._id" class="flex items-center gap-3 text-sm">
         <span class="shrink-0 w-9 h-9 rounded-full flex items-center justify-center" :class="typeBubble[t.type]">
@@ -52,8 +57,8 @@ function formatDate(d: string) {
           <p class="font-medium truncate">{{ t.note || t.categorie || typeLabels[t.type] }}</p>
           <p class="text-xs text-slate-400">{{ formatDate(t.date) }} · {{ typeLabels[t.type] }}</p>
         </div>
-        <span class="shrink-0 font-semibold" :class="t.type === 'revenu' ? 'text-good' : 'text-slate-600 dark:text-slate-300'">
-          {{ t.type === 'revenu' ? '+' : '-' }}{{ formatMontant(t.montant) }} €
+        <span class="shrink-0 font-semibold" :class="signeTransaction(t) === '+' ? 'text-good' : 'text-slate-600 dark:text-slate-300'">
+          {{ signeTransaction(t) }}{{ formatMontant(montantAffiche(t)) }} €
         </span>
       </div>
     </div>
