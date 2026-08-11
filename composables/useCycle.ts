@@ -16,6 +16,7 @@ export interface TransactionData {
   date: string
   paye: boolean
   cycleId: string
+  projetId?: string
 }
 
 const cycleActif = ref<CycleData | null>(null)
@@ -49,6 +50,19 @@ export function calculerTotauxCycle(transactions: TransactionData[]) {
   const totalDepensesFixesPrevu = totalDepensesFixes + nonPayees
 
   return { totalRevenu, totalDepensesVariables, totalEpargne, totalDepensesFixes, totalDepensesFixesPrevu }
+}
+
+// An `epargne` row carries a negative amount when money is taken back out of a
+// savings project. Rendering the usual '-' in front of it would print
+// "--21.60", so sign and magnitude are derived together here and shared by
+// every view that lists transactions.
+export function signeTransaction(t: Pick<TransactionData, 'type' | 'montant'>) {
+  const entrant = t.type === 'revenu' || (t.type === 'epargne' && t.montant < 0)
+  return entrant ? '+' : '-'
+}
+
+export function montantAffiche(t: Pick<TransactionData, 'montant'>) {
+  return Math.abs(t.montant)
 }
 
 export function calculerMoisCouvert(cycle: CycleData | null): string | null {

@@ -1,4 +1,6 @@
 import { ProjetEpargne } from '~/server/models/ProjetEpargne'
+import { Cycle } from '~/server/models/Cycle'
+import { Transaction } from '~/server/models/Transaction'
 
 export default defineEventHandler(async (event) => {
   const userId = await requireUserId(event)
@@ -18,8 +20,35 @@ export default defineEventHandler(async (event) => {
     if (!projet) {
       throw createError({ statusCode: 404, statusMessage: 'Project not found' })
     }
-    projet.montantActuel = Math.max(0, projet.montantActuel + body.delta)
+    const avant = projet.montantActuel
+    projet.montantActuel = Math.max(0, avant + body.delta)
     await projet.save()
+
+    // Money put aside is money spent out of the month's budget, so mirror the
+    // movement as an `epargne` transaction on the active cycle — without this
+    // the dashboard's Savings total stayed at 0 no matter how much was saved,
+    // and the amount never left the "left to spend" envelope.
+    // A withdrawal is stored as a negative amount, which correctly subtracts
+    // from the savings total and hands the money back to the envelope.
+    // The applied delta can be smaller than the requested one when a
+    // withdrawal is clamped at zero, so record what actually moved.
+    const applique = projet.montantActuel - avant
+    if (applique !== 0) {
+      const cycle = await Cycle.findOne({ statut: 'actif', userId }).sort({ dateDebut: -1 })
+      if (cycle) {
+        await Transaction.create({
+          montant: applique,
+          montantPrevu: applique,
+          type: 'epargne',
+          categorie: '',
+          note: projet.nom,
+          date: new Date(),
+          cycleId: cycle._id,
+          projetId: projet._id,
+          userId
+        })
+      }
+    }
   } else {
     if (body.montantCible !== undefined) assertPositiveNumber(body.montantCible, 'montantCible')
     if (body.montantActuel !== undefined) assertNonNegativeNumber(body.montantActuel, 'montantActuel')

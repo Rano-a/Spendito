@@ -44,7 +44,10 @@ const typeBubble: Record<string, string> = {
   revenu: 'bg-good/15 text-good dark:shadow-glow-good'
 }
 
-const signe = computed(() => props.transaction.type === 'revenu' ? '+' : '-')
+// Savings rows mirrored from a project are managed on the Projects page;
+// editing the amount here would desync it from the project balance.
+const gereParProjet = computed(() => !!props.transaction.projetId)
+
 const togglingPaye = ref(false)
 
 async function togglePaye() {
@@ -116,7 +119,7 @@ function formatDate(d: string) {
       <div class="flex items-center gap-2 shrink-0">
         <div class="text-right">
           <span class="font-semibold block" :class="typeColor[transaction.type]">
-            {{ signe }}{{ transaction.montant.toFixed(2) }} €
+            {{ signeTransaction(transaction) }}{{ montantAffiche(transaction).toFixed(2) }} €
           </span>
           <span
             v-if="aPrevu && transaction.montantPrevu != null && transaction.montantPrevu !== transaction.montant"
@@ -125,7 +128,7 @@ function formatDate(d: string) {
             Planned {{ transaction.montantPrevu.toFixed(2) }} €
           </span>
         </div>
-        <button class="p-1.5 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400" @click="startEdit">
+        <button v-if="!gereParProjet" class="p-1.5 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400" @click="startEdit">
           <Pencil :size="15" />
         </button>
         <button class="p-1.5 rounded-full hover:bg-bad-bg dark:hover:bg-bad/10 text-slate-400 hover:text-bad" @click="remove">

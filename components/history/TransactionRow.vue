@@ -32,7 +32,6 @@ const typeBubble: Record<string, string> = {
   revenu: 'bg-good/15 text-good dark:shadow-glow-good'
 }
 
-const signe = computed(() => props.transaction.type === 'revenu' ? '+' : '-')
 const aPrevu = computed(() =>
   props.transaction.type === 'depense_fixe' &&
   props.transaction.montantPrevu != null &&
@@ -55,7 +54,7 @@ const paye = computed(() => props.transaction.type === 'depense_fixe' && props.t
     </div>
     <div class="text-right shrink-0">
       <span class="font-semibold block" :class="typeColor[transaction.type]">
-        {{ signe }}{{ transaction.montant.toFixed(2) }} €
+        {{ signeTransaction(transaction) }}{{ montantAffiche(transaction).toFixed(2) }} €
       </span>
       <span v-if="aPrevu" class="text-xs text-slate-400">
         Planned {{ transaction.montantPrevu!.toFixed(2) }} €

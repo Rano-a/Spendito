@@ -33,7 +33,9 @@ export function useProjets() {
 
   async function ajusterMontant(id: string, delta: number) {
     await $fetch(`/api/projets/${id}`, { method: 'PATCH', body: { delta } })
-    await refresh()
+    // The server mirrors the movement as an `epargne` transaction on the active
+    // cycle, so the cycle totals are stale until they're refetched too.
+    await Promise.all([refresh(), useCycle().refresh()])
   }
 
   async function supprimerProjet(id: string) {

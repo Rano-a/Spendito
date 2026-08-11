@@ -15,6 +15,9 @@ const TransactionSchema = new Schema({
   date: { type: Date, default: Date.now },
   paye: { type: Boolean, default: false },
   cycleId: { type: Schema.Types.ObjectId, ref: 'Cycle', required: true },
+  // Set on the 'epargne' rows mirroring a savings-project movement, so a
+  // transaction can be traced back to the project that produced it.
+  projetId: { type: Schema.Types.ObjectId, ref: 'ProjetEpargne' },
   userId: { type: Schema.Types.ObjectId, ref: 'User' }
 }, { timestamps: true })
 
