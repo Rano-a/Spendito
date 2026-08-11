@@ -2,7 +2,7 @@
 import { ChevronDown, ChevronUp } from 'lucide-vue-next'
 import type { CycleData, TransactionData } from '~/composables/useCycle'
 
-const props = defineProps<{ cycle: CycleData }>()
+const props = withDefaults(defineProps<{ cycle: CycleData, ambigu?: boolean }>(), { ambigu: false })
 
 const transactions = ref<TransactionData[]>([])
 const loading = ref(true)
@@ -28,6 +28,12 @@ function formatDate(iso: string) {
   return new Date(iso).toLocaleDateString('en-US', { day: 'numeric', month: 'short', timeZone: 'UTC' })
 }
 const plage = computed(() => `${formatDate(props.cycle.dateDebut)} – ${formatDate(props.cycle.dateFinPrevue)}`)
+
+// When another closed cycle resolves to the same month, the range is what
+// actually tells the two apart — so it takes the heading and the month drops
+// to the subtitle rather than repeating an identical title twice.
+const titre = computed(() => props.ambigu ? plage.value : moisLabel.value)
+const sousTitre = computed(() => props.ambigu ? moisLabel.value : plage.value)
 
 const tuiles = computed(() => [
   { label: 'Income', valeur: totaux.value.totalRevenu, dot: 'bg-good' },
@@ -68,8 +74,8 @@ const groupes = computed(() => {
   <div class="card overflow-hidden">
     <button class="w-full flex items-center justify-between gap-3 p-5 text-left" @click="expanded = !expanded">
       <div>
-        <h3 class="font-semibold">{{ moisLabel }}</h3>
-        <p class="text-xs text-slate-400">{{ plage }}</p>
+        <h3 class="font-semibold">{{ titre }}</h3>
+        <p class="text-xs text-slate-400">{{ sousTitre }}</p>
       </div>
       <component :is="expanded ? ChevronUp : ChevronDown" :size="18" class="shrink-0 text-slate-400" />
     </button>

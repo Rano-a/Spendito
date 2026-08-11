@@ -2,6 +2,22 @@
 const { historique, refresh } = useCycle()
 
 onMounted(refresh)
+
+// Two cycles can legitimately cover the same calendar month — a month started
+// early, or a short cycle — and would then render two cards under an identical
+// "July 2026" heading with no way to tell them apart. Flag only the colliding
+// ones so the common case keeps the clean month title.
+const cartes = computed(() => {
+  const occurrences = new Map<string, number>()
+  for (const cycle of historique.value) {
+    const label = calculerMoisCouvert(cycle) || ''
+    occurrences.set(label, (occurrences.get(label) || 0) + 1)
+  }
+  return historique.value.map(cycle => ({
+    cycle,
+    ambigu: (occurrences.get(calculerMoisCouvert(cycle) || '') || 0) > 1
+  }))
+})
 </script>
 
 <template>
@@ -16,7 +32,12 @@ onMounted(refresh)
     </div>
 
     <div v-else class="space-y-4">
-      <HistoryMonthCard v-for="cycle in historique" :key="cycle._id" :cycle="cycle" />
+      <HistoryMonthCard
+        v-for="carte in cartes"
+        :key="carte.cycle._id"
+        :cycle="carte.cycle"
+        :ambigu="carte.ambigu"
+      />
     </div>
   </div>
 </template>
