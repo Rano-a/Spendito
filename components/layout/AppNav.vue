@@ -31,7 +31,7 @@ function isActive(path: string) {
   >
     <div class="flex items-center gap-2 font-semibold text-lg px-4 lg:px-6 py-5 justify-center lg:justify-start">
       <PiggyBank :size="24" class="text-indigo-500 dark:text-accent-violet-dark shrink-0" />
-      <span class="hidden lg:inline">Budgeto</span>
+      <span class="hidden lg:inline">Spendito</span>
     </div>
     <div class="flex-1 flex flex-col gap-1 px-2 lg:px-3 mt-2">
       <NuxtLink
@@ -84,7 +84,7 @@ function isActive(path: string) {
   <div class="flex sm:hidden items-center justify-between px-4 py-3 border-b border-slate-100 dark:border-white/10 dark:bg-slate-900/60 dark:backdrop-blur-xl">
     <div class="flex items-center gap-2 font-semibold">
       <PiggyBank :size="20" class="text-indigo-500 dark:text-accent-violet-dark" />
-      Budgeto
+      Spendito
     </div>
     <div class="flex items-center gap-1">
       <button

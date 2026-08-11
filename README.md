@@ -1,4 +1,4 @@
-# Budgeto
+# Spendito
 
 A personal budget tracker built with Nuxt 3, Vue 3, Tailwind CSS, and MongoDB. Mobile-first, multi-user — everyone has their own account and data.
 

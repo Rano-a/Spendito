@@ -10,11 +10,11 @@ export default defineNitroPlugin(async () => {
     // indexes on its own, so this removes the old one if it's still there.
     try {
       await Categorie.collection.dropIndex('nom_1')
-      console.log('[Budgeto] Dropped legacy nom_1 unique index on categories.')
+      console.log('[Spendito] Dropped legacy nom_1 unique index on categories.')
     } catch (err: any) {
       if (err.codeName !== 'IndexNotFound') throw err
     }
   } catch (err) {
-    console.error('[Budgeto] Startup migration failed:', err)
+    console.error('[Spendito] Startup migration failed:', err)
   }
 })

@@ -12,6 +12,8 @@ export async function connectDB() {
     throw createError({ statusCode: 500, statusMessage: 'MONGODB_URI is not configured' })
   }
 
+  // Kept as 'budgeto' after the rename to Spendito: changing it would point the
+  // app at a new, empty database and orphan every existing account.
   cached = mongoose.connect(uri, { dbName: 'budgeto' })
   ;(global as any)._mongooseConn = cached
 

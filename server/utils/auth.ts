@@ -13,7 +13,7 @@ function sessionConfig() {
   }
   return {
     password,
-    name: 'budgeto-session',
+    name: 'spendito-session',
     maxAge: 60 * 60 * 24 * 30, // 30 days
     cookie: {
       // h3 defaults the session cookie to `secure: true`, which browsers

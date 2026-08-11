@@ -7,7 +7,7 @@ onMounted(refresh)
 <template>
   <div class="space-y-5">
     <div>
-      <p class="text-xs font-medium uppercase tracking-wider text-slate-400">Budgeto dashboard</p>
+      <p class="text-xs font-medium uppercase tracking-wider text-slate-400">Spendito dashboard</p>
       <h1 class="text-2xl font-bold tracking-tight">
         {{ moisCouvert ? `${moisCouvert} overview` : 'Overview' }}
       </h1>
