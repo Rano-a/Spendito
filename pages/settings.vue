@@ -106,16 +106,16 @@ async function savePassword() {
       <h3 class="text-sm font-medium text-slate-500 dark:text-slate-400">Password</h3>
       <div>
         <label class="block text-sm font-medium mb-1">Current password</label>
-        <input v-model="currentPassword" type="password" autocomplete="current-password" class="input">
+        <UiPasswordInput v-model="currentPassword" autocomplete="current-password" />
       </div>
       <div>
         <label class="block text-sm font-medium mb-1">New password</label>
-        <input v-model="newPassword" type="password" autocomplete="new-password" minlength="8" class="input">
+        <UiPasswordInput v-model="newPassword" autocomplete="new-password" minlength="8" />
         <p class="mt-1 text-xs text-slate-400">At least 8 characters, with letters and numbers.</p>
       </div>
       <div>
         <label class="block text-sm font-medium mb-1">Confirm new password</label>
-        <input v-model="confirmPassword" type="password" autocomplete="new-password" class="input" @keyup.enter="savePassword">
+        <UiPasswordInput v-model="confirmPassword" autocomplete="new-password" @enter="savePassword" />
         <p v-if="confirmPassword && newPassword !== confirmPassword" class="text-xs text-bad mt-1">Passwords don't match.</p>
       </div>
       <button class="btn-primary w-full py-2.5" :disabled="!peutChangerMdp || savingPassword" @click="savePassword">
